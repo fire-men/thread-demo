@@ -139,3 +139,47 @@
   workQueue ：任务队列，用于存放客户任务的容器
   threadFactory : 用于创建线程的工厂
   handler : 拒绝策略处理器  
+  
+  **7、ForkJoinPool**
+  
+  forkjoinPool了解
+   1、ForkJoinPool 不是为了替代 ExecutorService，而是它的补充，在某些应用场景下性能比 ExecutorService 更好。
+   2、ForkJoinPool 主要用于实现“分而治之”的算法，特别是分治之后递归调用的函数，例如 quick sort 等。
+   3、ForkJoinPool 最适合的是计算密集型的任务，如果存在 I/O，线程间同步，sleep() 等会造成线程长时间阻塞的情况时，最好配合使用 ManagedBlocker。
+
+  
+  参数详情
+  public ForkJoinPool(int parallelism,
+                          ForkJoinWorkerThreadFactory factory,
+                          UncaughtExceptionHandler handler,
+                          boolean asyncMode) {
+          this(checkParallelism(parallelism),
+               checkFactory(factory),
+               handler,
+               asyncMode ? FIFO_QUEUE : LIFO_QUEUE,
+               "ForkJoinPool-" + nextPoolId() + "-worker-");
+          checkPermission();
+      }
+  parallelism : 默认值为 Runtime.availableProcessors(),即返回处理器个数,我的为8核
+  factory: 默认值为defaultForkJoinWorkerThreadFactory，即创建ForkJoinWorkerThread,通过池子创造
+  handler ： 异常处理器，默认为null
+  asyncMode ： 是否是异步模式，默认为false，即LIFO_QUEUE模式，后进先出模式，比如线程栈
+    - FIFO：全称First in, First out，先进先出。队列结构
+    - LIFO：全称Last in, First out，后进先出。  栈结构
+    
+  
+  ForkJoinTask类  
+   1、有两个子类
+    - RecursiveTask  有返回值
+    - RecursiveAction 无返回值
+   2、两个核心方法
+      fork() 大任务拆分
+      join() 拆分后的子任务将结果合并
+      
+  
+   Fork/Join框架原理
+   待补充.........
+      
+    
+     
+    
